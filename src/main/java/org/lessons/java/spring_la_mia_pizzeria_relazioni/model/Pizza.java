@@ -1,6 +1,7 @@
 package org.lessons.java.spring_la_mia_pizzeria_relazioni.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,7 +9,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -18,7 +21,7 @@ public class Pizza {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotNull
+    @NotBlank(message = "The name cannot be blank or empty")
     private String name;
 
     @Lob
@@ -29,6 +32,10 @@ public class Pizza {
 
     @NotNull
     private BigDecimal price;
+
+    // collegamento tabella discout
+    @OneToMany(mappedBy = "pizza")
+    private List<Discount> discounts;
 
     public int getId() {
         return this.id;
@@ -68,6 +75,14 @@ public class Pizza {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public List<Discount> getDiscounts() {
+        return this.discounts;
+    }
+
+    public void setDiscounts(List<Discount> discounts) {
+        this.discounts = discounts;
     }
 
 }
