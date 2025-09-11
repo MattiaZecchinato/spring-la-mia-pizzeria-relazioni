@@ -104,7 +104,9 @@ public class PizzaController {
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") int pizzaId) {
 
-        for (Discount discount : pizzaRepository.findById(pizzaId).get().getDiscounts()) {
+        Pizza currentPizza = pizzaRepository.findById(pizzaId).get();
+
+        for (Discount discount : currentPizza.getDiscounts()) {
             discountRepository.deleteById(discount.getId());
         }
 
