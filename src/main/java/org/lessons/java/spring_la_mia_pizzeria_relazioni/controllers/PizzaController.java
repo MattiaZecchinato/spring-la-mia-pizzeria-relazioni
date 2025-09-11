@@ -3,7 +3,9 @@ package org.lessons.java.spring_la_mia_pizzeria_relazioni.controllers;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.lessons.java.spring_la_mia_pizzeria_relazioni.model.Discount;
 import org.lessons.java.spring_la_mia_pizzeria_relazioni.model.Pizza;
+import org.lessons.java.spring_la_mia_pizzeria_relazioni.repository.DiscountRepository;
 import org.lessons.java.spring_la_mia_pizzeria_relazioni.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +25,10 @@ import jakarta.validation.Valid;
 public class PizzaController {
 
     @Autowired
-    private PizzaRepository repository;
+    private PizzaRepository pizzaRepository;
+
+    @Autowired
+    private DiscountRepository discountRepository;
 
     @GetMapping
     public String index(@RequestParam(required = false) String pizzaName, Model model) {
@@ -31,9 +36,9 @@ public class PizzaController {
         List<Pizza> pizzasList = new ArrayList<>();
 
         if (pizzaName == null || pizzaName.isEmpty()) {
-            pizzasList = repository.findAll();
+            pizzasList = pizzaRepository.findAll();
         } else {
-            pizzasList = repository.findByNameStartingWith(pizzaName);
+            pizzasList = pizzaRepository.findByNameStartingWith(pizzaName);
         }
 
         model.addAttribute("pizzasList", pizzasList);
@@ -44,7 +49,7 @@ public class PizzaController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int pizzaId, Model model) {
 
-        List<Pizza> pizzasList = repository.findAll();
+        List<Pizza> pizzasList = pizzaRepository.findAll();
 
         for (Pizza currentPizza : pizzasList) {
             if (pizzaId == currentPizza.getId()) {
@@ -71,7 +76,7 @@ public class PizzaController {
             return "pizzas/createPizza";
         }
 
-        repository.save(formPizza);
+        pizzaRepository.save(formPizza);
 
         return "redirect:/pizzas";
     }
@@ -79,7 +84,7 @@ public class PizzaController {
     @GetMapping("/update/{id}")
     public String edit(@PathVariable("id") int pizzaId, Model model) {
 
-        model.addAttribute("pizza", repository.findById(pizzaId).get());
+        model.addAttribute("pizza", pizzaRepository.findById(pizzaId).get());
 
         return "pizzas/updatePizza";
     }
@@ -91,7 +96,7 @@ public class PizzaController {
             return "pizzas/updatePizza";
         }
 
-        repository.save(formPizza);
+        pizzaRepository.save(formPizza);
 
         return "redirect:/pizzas";
     }
@@ -99,9 +104,23 @@ public class PizzaController {
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") int pizzaId) {
 
-        repository.deleteById(pizzaId);
+        for (Discount discount : pizzaRepository.findById(pizzaId).get().getDiscounts()) {
+            discountRepository.deleteById(discount.getId());
+        }
+
+        pizzaRepository.deleteById(pizzaId);
 
         return "redirect:/pizzas";
     }
 
+    @GetMapping("/{id}/discount")
+    public String discount(@PathVariable("id") int pizzaId, Model model) {
+        Discount discount = new Discount();
+
+        discount.setPizza(pizzaRepository.findById(pizzaId).get());
+
+        model.addAttribute("discount", discount);
+
+        return "discounts/createDiscount";
+    }
 }
