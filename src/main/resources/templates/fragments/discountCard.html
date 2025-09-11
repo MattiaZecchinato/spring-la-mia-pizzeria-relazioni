@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <div th:fragment="discountCard(currentPizza)" class="card">
+        <div class="card-body">
+            <h5 class="card-title">Discounts</h5>
+            <div class="card-text">
+                <a th:href="@{/pizzas/{id}/discount(id=${currentPizza.id})}" class="btn btn-primary">New Discount</a>
+            </div>
+            <div class="card-text d-flex">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Value</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody th:each="discount : ${currentPizza.getDiscounts()}" th:object="${discount}">
+                        <tr>
+                            <td>[[*{title}]]</td>
+                            <td>[[*{value}]]%</td>
+                            <td>[[*{startTime}]]</td>
+                            <td>[[*{endTime}]]</td>
+                            <td>
+                                <a th:href="@{/discount/update/{id}(id=*{id})}" class="btn btn-primary">Edit</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
