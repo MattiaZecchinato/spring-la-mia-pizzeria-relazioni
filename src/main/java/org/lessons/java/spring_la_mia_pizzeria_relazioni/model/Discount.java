@@ -1,6 +1,7 @@
 package org.lessons.java.spring_la_mia_pizzeria_relazioni.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,9 +11,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 @Entity
 @Table(name = "discounts")
@@ -21,17 +23,19 @@ public class Discount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @NotBlank(message = "The start time cannot be blank or empty")
-    private String startTime;
+    @NotNull(message = "The start time cannot be null")
+    @PastOrPresent(message = "The start time cannot be in the future")
+    private LocalDate startTime;
 
-    @NotBlank(message = "The end time cannot be blank or empty")
-    private String endTime;
+    @NotNull(message = "The end time cannot be null")
+    private LocalDate endTime;
 
     @Lob
     private String title;
 
     @NotNull
-    @Min(value = 0, message = "The Value cannot be negative")
+    @Min(value = 0, message = "The value cannot be negative")
+    @Max(value = 100, message = "The value cannot exceed 100")
     private BigDecimal value;
 
     // collegamento tabella pizza
@@ -47,19 +51,19 @@ public class Discount {
         this.id = id;
     }
 
-    public String getStartTime() {
+    public LocalDate getStartTime() {
         return this.startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(LocalDate startTime) {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
+    public LocalDate getEndTime() {
         return this.endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(LocalDate endTime) {
         this.endTime = endTime;
     }
 
@@ -75,7 +79,15 @@ public class Discount {
         return this.value;
     }
 
-    public void setEndTime(BigDecimal value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
+    }
+
+    public Pizza getPizza() {
+        return this.pizza;
+    }
+
+    public void setPizza(Pizza pizza) {
+        this.pizza = pizza;
     }
 }
