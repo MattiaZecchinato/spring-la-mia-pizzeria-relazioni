@@ -56,4 +56,12 @@ public class DiscountController {
 
         return "redirect:/pizzas/" + formDiscount.getPizza().getId();
     }
+
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable("id") int discountId) {
+
+        discountRepository.deleteById(discountId);
+
+        return "redirect:/pizzas";
+    }
 }
