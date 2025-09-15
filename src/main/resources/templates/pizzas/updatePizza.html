@@ -51,6 +51,14 @@
                         </ul>
                     </div>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label">Ingredients</label>
+                    <div class="form-check" th:each="ingredient : ${ingredientList}">
+                        <input type="checkbox" th:id="|ingredient-${ingredient.id}|" th:field="*{ingredients}"
+                            th:value="${ingredient.id}">
+                        <label th:for="|ingredient-${ingredient.id}|" class="form-label">[[${ingredient.name}]]</label>
+                    </div>
+                </div>
                 <button type="submit" class="btn btn-primary">Update</button>
             </form>
         </div>
