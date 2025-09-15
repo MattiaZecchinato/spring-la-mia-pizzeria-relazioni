@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lessons.java.spring_la_mia_pizzeria_relazioni.model.Ingredient;
+import org.lessons.java.spring_la_mia_pizzeria_relazioni.model.Pizza;
 import org.lessons.java.spring_la_mia_pizzeria_relazioni.repository.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -99,6 +100,12 @@ public class IngredientController {
 
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") int ingredientId) {
+
+        Ingredient ingredientToDelete = ingredientRepository.findById(ingredientId).get();
+
+        for (Pizza currentPizza : ingredientToDelete.getPizzas()) {
+            currentPizza.getIngredients().remove(ingredientToDelete);
+        }
 
         ingredientRepository.deleteById(ingredientId);
 
