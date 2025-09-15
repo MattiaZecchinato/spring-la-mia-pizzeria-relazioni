@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.lessons.java.spring_la_mia_pizzeria_relazioni.model.Discount;
 import org.lessons.java.spring_la_mia_pizzeria_relazioni.model.Pizza;
 import org.lessons.java.spring_la_mia_pizzeria_relazioni.repository.DiscountRepository;
+import org.lessons.java.spring_la_mia_pizzeria_relazioni.repository.IngredientRepository;
 import org.lessons.java.spring_la_mia_pizzeria_relazioni.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,9 @@ public class PizzaController {
 
     @Autowired
     private DiscountRepository discountRepository;
+
+    @Autowired
+    private IngredientRepository ingredientRepository;
 
     @GetMapping
     public String index(@RequestParam(required = false) String pizzaName, Model model) {
@@ -64,6 +68,7 @@ public class PizzaController {
     public String create(Model model) {
 
         model.addAttribute("pizza", new Pizza());
+        model.addAttribute("ingredientList", ingredientRepository.findAll());
 
         return "pizzas/createPizza";
     }
@@ -72,7 +77,7 @@ public class PizzaController {
     public String store(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
-
+            model.addAttribute("ingredientList", ingredientRepository.findAll());
             return "pizzas/createPizza";
         }
 
@@ -85,6 +90,7 @@ public class PizzaController {
     public String edit(@PathVariable("id") int pizzaId, Model model) {
 
         model.addAttribute("pizza", pizzaRepository.findById(pizzaId).get());
+        model.addAttribute("ingredientList", ingredientRepository.findAll());
 
         return "pizzas/updatePizza";
     }
@@ -93,6 +99,7 @@ public class PizzaController {
     public String update(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("ingredientList", ingredientRepository.findAll());
             return "pizzas/updatePizza";
         }
 
