@@ -13,7 +13,7 @@
     <main>
         <h1 class="text-center">Create Discount for [[${discount.pizza.getName()}]]</h1>
         <div class="container">
-            <form th:fragment="form(path)" th:object="${discount}" th:action="@{/discount/create}" method="post">
+            <form th:object="${discount}" th:action="@{/discount/create}" method="post">
 
                 <input type="hidden" th:field="*{pizza}">
 
