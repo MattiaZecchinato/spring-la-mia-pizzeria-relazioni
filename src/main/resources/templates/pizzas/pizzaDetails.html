@@ -14,6 +14,9 @@
     <main>
         <h1 class="text-center">[[${pizza.name}]]</h1>
         <div th:insert="~{fragments/card :: card(${pizza})}" class="d-flex justify-content-center mt-4"></div>
+        <div th:insert="~{fragments/ingredientCard :: ingredientCard(${pizza})}"
+            class="d-flex justify-content-center mt-4">
+        </div>
         <div th:insert="~{fragments/discountCard :: discountCard(${pizza})}" class="d-flex justify-content-center mt-4">
         </div>
     </main>
