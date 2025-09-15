@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -36,6 +37,9 @@ public class Pizza {
     // collegamento tabella discout
     @OneToMany(mappedBy = "pizza")
     private List<Discount> discounts;
+
+    @ManyToMany(mappedBy = "pizzas")
+    private List<Ingredient> ingredients;
 
     public int getId() {
         return this.id;
@@ -85,4 +89,11 @@ public class Pizza {
         this.discounts = discounts;
     }
 
+    public List<Ingredient> getIngredients() {
+        return this.ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
 }
